@@ -5,6 +5,7 @@ import { ParseLatin } from "parse-latin";
 import { ParseEnglish } from "parse-english";
 import { toString } from "nlcst-to-string";
 import { visit } from "unist-util-visit";
+import matter from "gray-matter";
 
 const program = new Command();
 
@@ -21,9 +22,14 @@ program
     const parser =
       options.lang === "latin" ? new ParseLatin() : new ParseEnglish();
 
-    const content = await readFile(file, "utf-8");
+    const fileContent = await readFile(file, "utf-8");
 
-    const tree = parser.parse(content);
+    const { data, content } = matter(fileContent);
+    const hasMatter = Object.keys(data).length > 0;
+
+    const text = hasMatter ? content : fileContent;
+
+    const tree = parser.parse(text);
 
     visit(tree, "ParagraphNode", (node) => {
       console.log(toString(node));
