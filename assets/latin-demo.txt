@@ -1,0 +1,5 @@
+The easiest way to see how `parse-latin` parses,
+is by using this online demo.
+Here you can change the text and on the right the corresponding syntax tree is shown.
+
+Just try it. It’s pretty cool :)
