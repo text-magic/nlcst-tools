@@ -1,0 +1,14 @@
+{
+  "name": "parse-chinese",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "commander": "^14.0.0",
+    "gray-matter": "^4.0.3",
+    "nlcst-to-string": "^4.0.0",
+    "parse-english": "^7.0.0",
+    "parse-latin": "^7.0.0",
+    "unist-util-inspect": "^8.1.0",
+    "unist-util-visit": "^5.0.0"
+  }
+}

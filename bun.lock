@@ -10,6 +10,19 @@
         "typescript": "^5",
       },
     },
+    "packages/parse-chinese": {
+      "name": "parse-chinese",
+      "version": "0.1.0",
+      "dependencies": {
+        "commander": "^14.0.0",
+        "gray-matter": "^4.0.3",
+        "nlcst-to-string": "^4.0.0",
+        "parse-english": "^7.0.0",
+        "parse-latin": "^7.0.0",
+        "unist-util-inspect": "^8.1.0",
+        "unist-util-visit": "^5.0.0",
+      },
+    },
     "packages/play": {
       "name": "nlcst-playground",
       "version": "0.1.0",
@@ -60,6 +73,8 @@
     "nlcst-playground": ["nlcst-playground@workspace:packages/play"],
 
     "nlcst-to-string": ["nlcst-to-string@4.0.0", "", { "dependencies": { "@types/nlcst": "^2.0.0" } }, "sha512-YKLBCcUYKAg0FNlOBT6aI91qFmSiFKiluk655WzPF+DDMA02qIyy8uiRqI8QXtcFpEvll12LpL5MXqEmAZ+dcA=="],
+
+    "parse-chinese": ["parse-chinese@workspace:packages/parse-chinese"],
 
     "parse-english": ["parse-english@7.0.0", "", { "dependencies": { "@types/nlcst": "^2.0.0", "nlcst-to-string": "^4.0.0", "parse-latin": "^7.0.0", "unist-util-modify-children": "^4.0.0", "unist-util-visit-children": "^3.0.0" } }, "sha512-mxxj3DyPdvOdiUl1okNub3wwoaaZI/Z++paDg3PH96RYvfVilS63WmQOnHlGm0S05y4g9GEjNP3pylyBsJrAwQ=="],
 
