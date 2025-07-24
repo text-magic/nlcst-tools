@@ -3,19 +3,25 @@
 import { AppShell, Burger, Menu, Button, Text, List } from "@mantine/core";
 import { useDisclosure, useFileDialog } from "@mantine/hooks";
 import { IconFile, IconClearAll } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TextMagic() {
   const [opened, { toggle }] = useDisclosure();
-  const fileDialog = useFileDialog();
+  const fileDialog = useFileDialog({ multiple: false, resetOnOpen: true });
 
-  const [currentFile, setCurrentFile] = useState<string | null>(null);
+  const [fileContent, setFileContent] = useState<string>("");
 
-  const pickedFiles = Array.from(fileDialog.files ?? []).map((file) => (
-    <List.Item key={file.name} onClick={() => setCurrentFile(file.name)}>
-      {file.name}
-    </List.Item>
-  ));
+  const pickedFile = fileDialog.files?.[0];
+
+  useEffect(() => {
+    if (!pickedFile) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFileContent(reader.result as string);
+    };
+    reader.readAsText(pickedFile);
+  }, [pickedFile]);
 
   return (
     <AppShell
@@ -23,7 +29,7 @@ export default function TextMagic() {
       header={{ height: 60 }}
       navbar={{ width: 300, breakpoint: "md", collapsed: { mobile: !opened } }}
     >
-      <AppShell.Header>
+      <AppShell.Header className="flex items-center gap-4">
         <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" />
 
         <Menu shadow="md" width={200}>
@@ -39,7 +45,7 @@ export default function TextMagic() {
             >
               Open File
             </Menu.Item>
-            {pickedFiles.length > 0 && (
+            {pickedFile && (
               <Menu.Item
                 leftSection={<IconClearAll size={14} />}
                 onClick={fileDialog.reset}
@@ -49,19 +55,25 @@ export default function TextMagic() {
             )}
           </Menu.Dropdown>
         </Menu>
+
+        {pickedFile && (
+          <>
+            <Text>{pickedFile.name}</Text>
+            <Button onClick={fileDialog.reset}>Clear</Button>
+          </>
+        )}
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <AppShell.Section>Navbar</AppShell.Section>
+        <AppShell.Section>Chapter</AppShell.Section>
         <AppShell.Section>
           <Text>Files</Text>
-          {pickedFiles.length > 0 && <List mt="lg">{pickedFiles}</List>}
         </AppShell.Section>
       </AppShell.Navbar>
 
       <AppShell.Main>
         <h1>File Preview</h1>
-        {currentFile && <p>{currentFile}</p>}
+        {pickedFile && <p>{fileContent}</p>}
       </AppShell.Main>
     </AppShell>
   );
