@@ -5,11 +5,15 @@ import { useDisclosure, useFileDialog } from "@mantine/hooks";
 import { IconFile, IconClearAll } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { chapterize, paragraphize } from "@text-magic/chapterize";
+import matter from "gray-matter";
 
 export default function TextMagic() {
   const [opened, { toggle }] = useDisclosure();
   const fileDialog = useFileDialog({ multiple: false, resetOnOpen: true });
 
+  const [fileAttr, setFileAttr] = useState<
+    matter.GrayMatterFile<string>["data"] | null
+  >(null);
   const [fileContent, setFileContent] = useState<string>("");
   const [chapters, setChapters] = useState<string[]>([]);
 
@@ -20,8 +24,10 @@ export default function TextMagic() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      setFileContent(reader.result as string);
-      setChapters(chapterize(reader.result as string));
+      const { content, data } = matter(reader.result as string);
+      setFileAttr(data);
+      setFileContent(content);
+      setChapters(chapterize(content));
     };
     reader.readAsText(pickedFile);
   }, [pickedFile]);
@@ -85,7 +91,9 @@ export default function TextMagic() {
         {fileContent && (
           <section>
             {paragraphs.map((paragraph, index) => (
-              <p className="my-2" key={index}>{paragraph}</p>
+              <p className="my-2" key={index}>
+                {paragraph}
+              </p>
             ))}
           </section>
         )}
