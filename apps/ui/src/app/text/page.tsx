@@ -4,12 +4,14 @@ import { AppShell, Burger, Menu, Button, Text, List } from "@mantine/core";
 import { useDisclosure, useFileDialog } from "@mantine/hooks";
 import { IconFile, IconClearAll } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { chapterize } from "@text-magic/chapterize";
 
 export default function TextMagic() {
   const [opened, { toggle }] = useDisclosure();
   const fileDialog = useFileDialog({ multiple: false, resetOnOpen: true });
 
   const [fileContent, setFileContent] = useState<string>("");
+  const [chapters, setChapters] = useState<string[]>([]);
 
   const pickedFile = fileDialog.files?.[0];
 
@@ -19,6 +21,7 @@ export default function TextMagic() {
     const reader = new FileReader();
     reader.onload = () => {
       setFileContent(reader.result as string);
+      setChapters(chapterize(reader.result as string));
     };
     reader.readAsText(pickedFile);
   }, [pickedFile]);
@@ -67,7 +70,11 @@ export default function TextMagic() {
       <AppShell.Navbar>
         <AppShell.Section>Chapter</AppShell.Section>
         <AppShell.Section>
-          <Text>Files</Text>
+          <List>
+            {chapters.map((chapter, index) => (
+              <List.Item key={index}>{chapter}</List.Item>
+            ))}
+          </List>
         </AppShell.Section>
       </AppShell.Navbar>
 
